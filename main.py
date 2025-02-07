@@ -9,9 +9,7 @@ print(f"Absolute path to templates folder: {template_path}")
 
 @app.route('/')
 def index():
-    # Теперь используем static_folder для определения DATA_FILE
     DATA_FILE = os.path.join(static_folder, 'streets_data.json')
-
     UPLOAD_FOLDER = os.path.join(app.static_folder, 'portrets') # папка для загрузки
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # ограничение размера файла (16MB)

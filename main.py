@@ -4,10 +4,6 @@ from flask import Flask, send_from_directory
 static_folder = os.path.abspath("static")  # Определяем static_folder здесь
 app = Flask(__name__, static_folder=static_folder)  # Передаем static_folder в Flask
 
-# Получаем абсолютный путь к папке templates (больше не нужен)
-# template_path = os.path.abspath("templates")
-# print(f"Absolute path to templates folder: {template_path}")
-
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}  # разрешенные расширения
 
 def allowed_file(filename):
@@ -38,15 +34,11 @@ def get_next_id(data):
 
 @app.route('/')
 def index():
-    # return render_template('index.html', streets_data=streets_data) # Больше не используем render_template
-    return send_from_directory(static_folder, 'index.html')  # Отправляем index.html как статический файл
+    return send_from_directory(app.static_folder, 'index.html')  # Используем app.static_folder и относительный путь
 
 @app.route('/adm')
 def admin():
-    # streets_data = load_data() # Больше не используем load_data
-    # return render_template('adm.html', streets_data=streets_data) # Больше не используем render_template
     return "Admin page is under construction" # Просто возвращаем текст
-
 
 @app.route('/admin/edit', methods=['GET', 'POST'])
 def admin_edit():

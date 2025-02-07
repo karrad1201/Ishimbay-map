@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_adm.css') }}?v=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+
+    <div class="polygon-container">
+
+        <header>
+            <h1>{% block header %}{% endblock %}</h1>
+        </header>
+
+        <main>
+            <aside class="object-list">
+                <h2>Объекты</h2>
+                <ul id="object-list">
+                    {% for street in streets_data %}
+                        <li><a href="{{ url_for('admin_edit', street_id=street.id) }}">{{ street.name }}</a></li>
+                    {% endfor %}
+                </ul>
+                <form method="post" action="/admin/add">
+                    <button type="submit" id="add-object-button">Добавить объект</button>
+                </form>
+            </aside>
+
+            <section class="object-editor">
+              {% block content %}{% endblock %}
+            </section>
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script_admin.js') }}"></script> <!-- ПЕРЕНЕСЛИ СЮДА -->
+</body>
+</html>

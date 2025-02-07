@@ -6,17 +6,18 @@ app = Flask(__name__, template_folder="templates")
 # Получаем абсолютный путь к папке templates
 template_path = os.path.abspath("templates")
 print(f"Absolute path to templates folder: {template_path}")
+
 @app.route('/')
 def index():
+    # Теперь используем static_folder для определения DATA_FILE
+    DATA_FILE = os.path.join(static_folder, 'streets_data.json')
 
-# Теперь используем static_folder для определения DATA_FILE
-DATA_FILE = os.path.join(static_folder, 'streets_data.json')
-
-UPLOAD_FOLDER = os.path.join(app.static_folder, 'portrets') # папка для загрузки
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # ограничение размера файла (16MB)
+    UPLOAD_FOLDER = os.path.join(app.static_folder, 'portrets') # папка для загрузки
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # ограничение размера файла (16MB)
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}  # разрешенные расширения
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

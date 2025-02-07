@@ -6,7 +6,7 @@ import os
 # Получаем абсолютный путь к папке static
 static_folder = os.path.abspath("static")
 
-app = Flask(__name__, static_folder=static_folder)
+app = Flask(__name__, static_folder=static_folder, template_folder="templates")
 
 # Теперь используем static_folder для определения DATA_FILE
 DATA_FILE = os.path.join(static_folder, 'streets_data.json')

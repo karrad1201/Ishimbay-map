@@ -38,10 +38,8 @@ def get_next_id(data):
 
 @app.route('/')
 def index():
-    streets_data = load_data()
-    for street in streets_data:
-        street['static_url'] = '/static'
-    return render_template('index.html', streets_data=streets_data)
+    template_path = os.path.join(app.template_folder, 'index.html')
+    return render_template(template_path)
 
 @app.route('/adm')
 def admin():

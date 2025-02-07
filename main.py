@@ -13,9 +13,10 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}  # разрешенные р�
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
+    
 def load_data():
-    DATA_FILE = os.path.join(static_folder, 'streets_data.json')  # Используем static_folder здесь
+    import json  # Импортируем json здесь
+    DATA_FILE = os.path.join(static_folder, 'streets_data.json')
     with open(DATA_FILE, 'r', encoding='utf-8') as f:
         return json.load(f)
 

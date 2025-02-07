@@ -1,8 +1,8 @@
 import os
-from flask import Flask, send_from_directory
+from flask import Flask, render_template
 
 static_folder = os.path.abspath("static")  # Определяем static_folder здесь
-app = Flask(__name__, static_folder=static_folder)  # Передаем static_folder в Flask
+app = Flask(__name__, template_folder="templates", static_folder=static_folder)  # Передаем static_folder в Flask
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}  # разрешенные расширения
 
@@ -34,11 +34,14 @@ def get_next_id(data):
 
 @app.route('/')
 def index():
-    return send_from_directory(app.static_folder, 'index.html')  # Используем app.static_folder и относительный путь
+    streets_data = load_data()
+    print(streets_data)  # Добавляем эту строку для проверки данных
+    return render_template('index.html', streets_data=streets_data)
 
 @app.route('/adm')
 def admin():
-    return "Admin page is under construction" # Просто возвращаем текст
+    streets_data = load_data()
+    return render_template('adm.html', streets_data=streets_data)
 
 @app.route('/admin/edit', methods=['GET', 'POST'])
 def admin_edit():

@@ -24,10 +24,11 @@
     </header>
 
     <main>
+        {% if admin_page %}
             <aside class="object-list">
                 <h2>Объекты</h2>
                 <ul id="object-list">
-                    {% for street in streets_data %} <!--  <<<  ДОБАВЛЕН ВЫВОД street.id  <<<  -->
+                    {% for street in streets_data %}
                         <li><a href="{{ url_for('admin_edit_form', street_id=street.id) }}">{{ street.name }}</a></li>
                     {% endfor %}
                 </ul>
@@ -35,10 +36,11 @@
                     <button type="submit" id="add-object-button">Добавить объект</button>
                 </form>
             </aside>
+        {% endif %}
 
-            <section class="object-editor">
-              {% block content %}{% endblock %}
-            </section>
-        </main>
+        <section class="object-editor">
+          {% block content %}{% endblock %}
+        </section>
+    </main>
 </body>
 </html>

@@ -14,7 +14,7 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
 def load_data():
-    with open("streets_data.json", 'r', encoding='utf-8') as f:
+    with open(os.path.join("static", "streets_data.json"), 'r', encoding='utf-8') as f:
         streets = json.load(f)
     return streets
 

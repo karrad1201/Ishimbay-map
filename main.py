@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/portrets'  # Путь для сохранения загруженных изображений
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}  # Разрешенные типы файлов
-app.secret_key = '1111'  # Замените на свой секретный ключ
+app.secret_key = 'your_secret_key'  # Замените на свой секретный ключ
 
 
 def allowed_file(filename):
@@ -141,7 +141,7 @@ def serve_portrets(filename):
 @app.route('/adm')
 def admin():
     streets_data = load_data()
-    return render_template('adm.html', streets_data=streets_data)
+    return render_template('base.html', streets_data=streets_data, admin_page=True)
 
 if __name__ == '__main__':
     app.run(debug=True)

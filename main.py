@@ -69,6 +69,10 @@ def admin():
 
 # Остальной код
 
+@app.route('/uploads/<filename>')
+def serve_portrets(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 @app.route('/admin/edit', methods=['GET', 'POST'])
 def admin_edit():
     streets_data = load_data()

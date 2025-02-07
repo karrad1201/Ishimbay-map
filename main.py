@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 static_folder = os.path.abspath("static")  # Определяем static_folder здесь
 app = Flask(__name__, template_folder="templates", static_folder=static_folder)  # Передаем static_folder в Flask

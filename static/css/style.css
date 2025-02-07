@@ -1,0 +1,188 @@
+/* Сброс box-sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensure body takes full viewport height */
+    margin: 0;
+    background-image: url('background/ishimbay.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #333;
+    background-attachment: fixed; /* Prevent background from scrolling */
+    overflow: hidden; /* Prevent scrolling on body */
+}
+
+#content-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    width: calc(100% - 60px);
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.9); /* Re-add background here */
+    padding: 30px;
+    height: 600px; /* Restoring the original height */
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+#map-container {
+    width: 66.66%;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    position: relative;
+}
+
+#menu-container {
+    width: 33.33%;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    overflow-y: auto; /* Make this scrollable if content overflows */
+}
+
+#search-container {
+    margin-bottom: 10px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#streetList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #333; /* Adding the border */
+    border-radius: 5px; /* Optional: for rounded corners */
+    overflow-y: auto; /* Scrollable list */
+    background-color: white;
+    flex-grow: 1;
+}
+
+#streetList li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #444;
+}
+
+#streetList li:last-child {
+    border-bottom: none;
+}
+
+#streetList li:hover {
+    background-color: #f0f0f0;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+}
+
+/* Стили для модального окна */
+.modal {
+    display: none;
+    position: absolute;
+    z-index: 10000;
+    top: 15%;
+    right: 3%;
+    width: 30%;
+    height: 75%;
+    overflow: auto;
+    background-color: transparent;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #888;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+    border-radius: 10px;
+    font-size: 14px;
+    height: calc(100% - 20px);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content h2 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.modal-content p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+/* Стили для заголовка модального окна */
+#modalHeader {
+    cursor: grab;
+    padding: 10px;
+    background-color: #eee;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Кнопка закрытия */
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+}
+
+/* Добавляем стили для кнопок */
+.page-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.page-buttons button {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.page-buttons button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

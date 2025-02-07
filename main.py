@@ -12,7 +12,6 @@ app.secret_key = "super secret key" #  Обязательно нужен для 
 # Создаем папку uploads, если ее нет
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
-
 def load_data():
     with open(os.path.join("static", "streets_data.json"), 'r', encoding='utf-8') as f:
         streets = json.load(f)

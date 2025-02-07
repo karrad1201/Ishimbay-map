@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 static_folder = os.path.abspath("static")  # Определяем static_folder здесь
 UPLOAD_FOLDER = os.path.join(static_folder, 'uploads')  # Вот эту строку добавляем

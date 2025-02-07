@@ -3,7 +3,9 @@ from flask import Flask, render_template
 
 static_folder = os.path.abspath("static")  # Определяем static_folder здесь
 
-app = Flask(__name__, template_folder="templates", static_folder=static_folder)  # Передаем static_folder в Flask
+app = Flask(__name__, template_folder="templates", static_folder=static_folder)  # Передаем static_folder в Flasktemplate_path = "/opt/render/project/src/templates/index.html"  # Включаем имя файла
+template_path = "/opt/render/project/src/templates/index.html"  # Включаем имя файла
+
 
 # Получаем абсолютный путь к папке templates
 template_path = os.path.abspath("templates")
@@ -38,7 +40,6 @@ def get_next_id(data):
 
 @app.route('/')
 def index():
-    template_path = os.path.join(app.template_folder, 'index.html')
     return render_template(template_path)
 
 @app.route('/adm')

@@ -1,57 +1,35 @@
 import os
 import json
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 from werkzeug.utils import secure_filename
 
-static_folder = os.path.abspath("static")
-UPLOAD_FOLDER = os.path.join(static_folder, 'uploads')
-app = Flask(__name__, template_folder="templates", static_folder=static_folder)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.secret_key = "super secret key" #  Обязательно нужен для flash
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'static/portrets'  # Путь для сохранения загруженных изображений
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}  # Разрешенные типы файлов
+app.secret_key = '1111'  # Замените на свой секретный ключ
 
-# Создаем папку uploads, если ее нет
-if not os.path.exists(app.config['UPLOAD_FOLDER']):
-    os.makedirs(app.config['UPLOAD_FOLDER'])
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+
 def load_data():
     with open(os.path.join("static", "streets_data.json"), 'r', encoding='utf-8') as f:
         streets = json.load(f)
     return streets
 
-def save_data(streets):
-    with open("streets_data.json", 'w', encoding='utf-8') as f:
-        json.dump(streets, f, ensure_ascii=False, indent=4)
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def save_data(data):
+    with open("static/streets_data.json", 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
 
 
-@app.route('/admin/add_page', methods=['POST'])
-def admin_add_page():
+@app.route('/')
+def index():
     streets_data = load_data()
-    street_id = request.form['street_id']
-    street = next((s for s in streets_data if s['id'] == street_id), None)
-    if street is None:
-        return "Street not found", 404
+    return render_template('index.html', streets_data=streets_data)
 
-    # Создаем новую пустую страницу
-    new_page = {
-        'title': '',
-        'content': '',
-        'photo': ''
-    }
 
-    # Добавляем новую страницу в список страниц
-    street['pages'].append(new_page)
-
-    # Сохраняем изменения в streets_data.json
-    save_data(streets_data)
-
-    # Перенаправляем пользователя обратно на страницу редактирования
-    return redirect(url_for('admin_edit_form', street_id=street_id))
-# Функция для отображения формы редактирования
 @app.route('/admin/edit', methods=['GET'])
 def admin_edit_form():
     street_id = request.args.get('street_id')
@@ -130,6 +108,31 @@ def admin_edit_save():
     return redirect(url_for('admin_edit_form', street_id=street_id))  # Редирект на GET-запрос
 
 
+@app.route('/admin/add_page', methods=['POST'])
+def admin_add_page():
+    streets_data = load_data()
+    street_id = request.form['street_id']
+    street = next((s for s in streets_data if s['id'] == street_id), None)
+    if street is None:
+        return "Street not found", 404
+
+    # Создаем новую пустую страницу
+    new_page = {
+        'title': '',
+        'content': '',
+        'photo': ''
+    }
+
+    # Добавляем новую страницу в список страниц
+    street['pages'].append(new_page)
+
+    # Сохраняем изменения в streets_data.json
+    save_data(streets_data)
+
+    # Перенаправляем пользователя обратно на страницу редактирования
+    return redirect(url_for('admin_edit_form', street_id=street_id))
+
+
 @app.route('/uploads/<filename>')
 def serve_portrets(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
@@ -139,11 +142,6 @@ def serve_portrets(filename):
 def admin():
     streets_data = load_data()
     return render_template('adm.html', streets_data=streets_data)
-
-@app.route('/')
-def index():
-    streets_data = load_data()
-    return render_template('index.html', streets_data=streets_data)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -27,6 +27,30 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
+@app.route('/admin/add_page', methods=['POST'])
+def admin_add_page():
+    streets_data = load_data()
+    street_id = request.form['street_id']
+    street = next((s for s in streets_data if s['id'] == street_id), None)
+    if street is None:
+        return "Street not found", 404
+
+    # Создаем новую пустую страницу
+    new_page = {
+        'title': '',
+        'content': '',
+        'photo': ''
+    }
+
+    # Добавляем новую страницу в список страниц
+    street['pages'].append(new_page)
+
+    # Сохраняем изменения в streets_data.json
+    save_data(streets_data)
+
+    # Перенаправляем пользователя обратно на страницу редактирования
+    return redirect(url_for('admin_edit_form', street_id=street_id))
 # Функция для отображения формы редактирования
 @app.route('/admin/edit', methods=['GET'])
 def admin_edit_form():

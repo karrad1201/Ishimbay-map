@@ -1,12 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
-from werkzeug.utils import secure_filename
-import json
 import os
+from flask import Flask, render_template
 
-# Получаем абсолютный путь к папке static
-static_folder = os.path.abspath("static")
+app = Flask(__name__, template_folder="templates")
 
-app = Flask(__name__, static_folder=static_folder, template_folder="templates")
+# Получаем абсолютный путь к папке templates
+template_path = os.path.abspath("templates")
+print(f"Absolute path to templates folder: {template_path}")
+
+@app.route('/')
+def index():
 
 # Теперь используем static_folder для определения DATA_FILE
 DATA_FILE = os.path.join(static_folder, 'streets_data.json')

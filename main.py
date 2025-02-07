@@ -1,49 +1,73 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash
 from werkzeug.utils import secure_filename
-static_folder = os.path.abspath("static")  # Определяем static_folder здесь
-UPLOAD_FOLDER = os.path.join(static_folder, 'uploads')  # Вот эту строку добавляем
+
+static_folder = os.path.abspath("static")
+UPLOAD_FOLDER = os.path.join(static_folder, 'uploads')
 app = Flask(__name__, template_folder="templates", static_folder=static_folder)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER  # И вот эту строку добавляем
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}  # разрешенные расширения
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+# Создаем папку uploads, если ее нет
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
 
 def load_data():
-    import json  # Импортируем json здесь
-    DATA_FILE = os.path.join(static_folder, 'streets_data.json')  # Используем static_folder здесь
-    with open(DATA_FILE, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    with open("streets_data.json", 'r', encoding='utf-8') as f:
+        streets = json.load(f)
+    return streets
 
-def save_data(data):
-    import json
-    DATA_FILE = os.path.join(static_folder, 'streets_data.json')  # Используем static_folder здесь
-    with open(DATA_FILE, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=4, ensure_ascii=False, sort_keys=True)
+def save_data(streets):
+    with open("streets_data.json", 'w', encoding='utf-8') as f:
+        json.dump(streets, f, ensure_ascii=False, indent=4)
 
-def get_next_id(data):
-    max_id = 0
-    for item in data:
-        if 'id' in item and isinstance(item['id'], (int, str)):
-            try:
-                current_id = int(item['id'])
-                max_id = max(max_id, current_id)
-            except ValueError:
-                pass
-    return str(max_id + 1)
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-@app.route('/')
-def index():
-    streets_data = load_data()
-    print(streets_data)  # Добавляем эту строку для проверки данных
-    return render_template('index.html', streets_data=streets_data)
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/admin/edit', methods=['GET', 'POST'])
+def admin_edit(street_id):
+    street_id = int(street_id)
+    streets = load_data()
+    street = next((s for s in streets if s['id'] == str(street_id)), None)
+    if street is None:
+        return "Street not found", 404
+
+    if request.method == 'POST':
+        if 'img' not in request.files:
+            flash('No file part')
+            return redirect(url_for('admin_edit', street_id=street_id))
+        file = request.files['img']
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(url_for('admin_edit', street_id=street_id))
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            # Сохраняем только имя файла, а не путь
+            street['img'] = filename
+            save_data(streets)
+            flash('File successfully uploaded')
+            return redirect(url_for('admin_edit', street_id=street_id))
+        else:
+            flash('File type not allowed')
+            return redirect(url_for('admin_edit', street_id=street_id))
+
+    return render_template('admin_edit.html', street=street)
+
+@app.route('/static/uploads/<filename>')
+def serve_portrets(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 
 @app.route('/adm')
 def admin():
     streets_data = load_data()
     return render_template('adm.html', streets_data=streets_data)
+
+# Остальной код
 
 @app.route('/admin/edit', methods=['GET', 'POST'])
 def admin_edit():

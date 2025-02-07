@@ -1,28 +1,26 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, send_from_directory
 
 static_folder = os.path.abspath("static")  # Определяем static_folder здесь
+app = Flask(__name__, static_folder=static_folder)  # Передаем static_folder в Flask
 
-app = Flask(__name__, template_folder="templates", static_folder=static_folder)  # Передаем static_folder в Flasktemplate_path = "/opt/render/project/src/templates/index.html"  # Включаем имя файла
-template_path = "/opt/render/project/src/templates/index.html"  # Включаем имя файла
-
-
-# Получаем абсолютный путь к папке templates
-template_path = os.path.abspath("templates")
-print(f"Absolute path to templates folder: {template_path}")
+# Получаем абсолютный путь к папке templates (больше не нужен)
+# template_path = os.path.abspath("templates")
+# print(f"Absolute path to templates folder: {template_path}")
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}  # разрешенные расширения
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    
+
 def load_data():
     import json  # Импортируем json здесь
-    DATA_FILE = os.path.join(static_folder, 'streets_data.json')
+    DATA_FILE = os.path.join(static_folder, 'streets_data.json')  # Используем static_folder здесь
     with open(DATA_FILE, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 def save_data(data):
+    import json
     DATA_FILE = os.path.join(static_folder, 'streets_data.json')  # Используем static_folder здесь
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False, sort_keys=True)
@@ -40,12 +38,15 @@ def get_next_id(data):
 
 @app.route('/')
 def index():
-    return render_template(template_path)
+    # return render_template('index.html', streets_data=streets_data) # Больше не используем render_template
+    return send_from_directory(static_folder, 'index.html')  # Отправляем index.html как статический файл
 
 @app.route('/adm')
 def admin():
-    streets_data = load_data()
-    return render_template('adm.html', streets_data=streets_data)
+    # streets_data = load_data() # Больше не используем load_data
+    # return render_template('adm.html', streets_data=streets_data) # Больше не используем render_template
+    return "Admin page is under construction" # Просто возвращаем текст
+
 
 @app.route('/admin/edit', methods=['GET', 'POST'])
 def admin_edit():

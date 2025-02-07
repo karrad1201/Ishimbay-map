@@ -1,30 +1,26 @@
 import os
 from flask import Flask, render_template
 
-app = Flask(__name__, template_folder="templates")
+static_folder = os.path.abspath("static")  # Определяем static_folder здесь
+
+app = Flask(__name__, template_folder="templates", static_folder=static_folder)  # Передаем static_folder в Flask
 
 # Получаем абсолютный путь к папке templates
 template_path = os.path.abspath("templates")
 print(f"Absolute path to templates folder: {template_path}")
 
-@app.route('/')
-def index():
-    DATA_FILE = os.path.join(static_folder, 'streets_data.json')
-    UPLOAD_FOLDER = os.path.join(app.static_folder, 'portrets') # папка для загрузки
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # ограничение размера файла (16MB)
-
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}  # разрешенные расширения
-
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def load_data():
+    DATA_FILE = os.path.join(static_folder, 'streets_data.json')  # Используем static_folder здесь
     with open(DATA_FILE, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 def save_data(data):
+    DATA_FILE = os.path.join(static_folder, 'streets_data.json')  # Используем static_folder здесь
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False, sort_keys=True)
 

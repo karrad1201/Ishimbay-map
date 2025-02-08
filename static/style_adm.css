@@ -1,149 +1,66 @@
+/* static/style_adm.css */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url('/static/background/ishimbay.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+    background-color: #f0f0f0; /* Общий фон страницы */
 }
 
-.polygon-container {
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin: auto;
-    max-width: 1600px; /* Увеличиваем max-width */
-    padding: 0;
-}
-
-header {
-    background-color: #333;
-    color: #fff;
+.pages-container {
+    width: 80%;
+    margin: 20px auto;
+    background-color: #fff;
     padding: 20px;
-    text-align: center;
-    width: 1400px;
-    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-main {
-    display: flex;
-    flex: 1;
-    /* padding: 20px; Убираем padding */
-    width: 100%;
-    margin: 0;
-}
-.object-list {
-    width: 300px;
-    margin-right: 20px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-}
-
-.object-list h2 {
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-.object-list ul {
-    list-style: none;
-    padding: 0;
-}
-
-.object-list li {
-    padding: 5px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.object-list li:last-child {
-    border-bottom: none;
-}
-
-.object-list a {
-    text-decoration: none;
-    color: #337ab7;
-}
-
-.object-list a:hover {
-    color: #23527c;
-}
-
-#add-object-button {
-    background-color: #5cb85c;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    display: block;
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
-}
-
-#add-object-button:hover {
-    background-color: #449d44;
-}
-
-
-.object-editor {
-    flex: 2;
-    padding: 10px;
-    border: 1px solid #ddd;
-    background-color: #f9f9f9;
-}
-
-.object-editor h2 {
-    margin-top: 0;
-    margin-bottom: 10px;
+.page {
+    margin-bottom: 20px;
 }
 
 .object-editor-content {
-    padding: 10px;
+    /* Стили для контента редактора объектов */
 }
 
 .scrollable-content {
     max-height: 400px;
     overflow-y: auto;
-    padding-right: 10px;
+    padding: 10px;
 }
 
-.button-container {
-    margin-top: 20px;
-    text-align: right;
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
-.save-button,
-.delete-button {
-    background-color: #337ab7;
-    color: white;
-    padding: 10px 15px;
-    border: none;
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
     border-radius: 4px;
-    cursor: pointer;
-    margin-left: 10px;
+    box-sizing: border-box;
 }
 
-.save-button:hover,
-.delete-button:hover {
-    background-color: #23527c;
+textarea.description-textarea {
+    height: 150px;
 }
 
-.delete-button {
-    background-color: #d9534f;
+input[type="file"] {
+    margin-bottom: 10px;
 }
 
-.delete-button:hover {
-    background-color: #c9302c;
+img {
+    max-width: 200px;
+    margin-bottom: 10px;
 }
 
 .pagination-container {
-    margin-top: 20px;
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .pagination {
@@ -151,50 +68,54 @@ main {
 }
 
 .page-numbers {
-    display: inline-block;
+    display: flex;
+    gap: 5px;
 }
 
 .page-number {
-    color: black;
-    float: left;
-    padding: 8px 16px;
+    display: inline-block;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     text-decoration: none;
-    transition: background-color .3s;
-    border: 1px solid #ddd;
-    margin: 0 4px;
+    color: #333;
     cursor: pointer;
 }
 
 .page-number.active {
-    background-color: #4CAF50;
-    color: white;
-    border: 1px solid #4CAF50;
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
 }
 
-.page-number:hover:not(.active) {
-    background-color: #ddd;
-}
-
-#add-page-button {
-    background-color: #5cb85c;
-    color: white;
-    padding: 8px 16px;
+.add-page-button {
+    background-color: #28a745;
+    color: #fff;
     border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.button-container {
+    text-align: center;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
     border-radius: 4px;
     cursor: pointer;
 }
 
-#add-page-button:hover {
-    background-color: #449d44;
-}
-
-.description-textarea {
-    resize: vertical;
-    width: 95%;
-    box-sizing: border-box;
-    font-family: sans-serif;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    height: 150px;
-    padding: 8px;
+.save-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
 }

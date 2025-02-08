@@ -150,15 +150,15 @@ function displayStreets(streetsData) {
             let displayName = "";
             let imageHTML = "";
 
-            if (street.class === "Важное" && street.photo) {
+            if (street.class === "Важное") {
                 imageHTML = `<img src="/static/img/vasno.png" alt="Важное" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;">`;
             }
 
-            if (street.class === "Школа" && street.photo) {
+            if (street.class === "Школа") {
                 imageHTML = `<img src="/static/img/school.png" alt="Школа" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;">`;
             }
 
-            if (street.class === "Прочее" && street.photo) {
+            if (street.class === "Прочее") {
                 imageHTML = `<img src="/static/img/.png" alt="Прочее" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;">`;
             }
 

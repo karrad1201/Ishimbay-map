@@ -8,27 +8,22 @@ app.config['UPLOAD_FOLDER'] = 'static/portrets'  # Путь для сохран�
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}  # Разрешенные типы файлов
 app.secret_key = 'your_secret_key'  # Замените на свой секретный ключ
 
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
-
 
 def load_data():
     with open(os.path.join("static", "streets_data.json"), 'r', encoding='utf-8') as f:
         streets = json.load(f)
     return streets
 
-
 def save_data(data):
     with open("static/streets_data.json", 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
-
 
 @app.route('/')
 def index():
     streets_data = load_data()
     return render_template('index.html', streets_data=streets_data)
-
 
 @app.route('/admin/edit', methods=['GET'])
 def admin_edit_form():
@@ -44,7 +39,6 @@ def admin_edit_form():
         return "Street not found", 404
 
     return render_template('admin_edit.html', street=street, streets_data=streets_data)
-
 
 # Функция для сохранения данных
 @app.route('/admin/edit', methods=['POST'])
@@ -107,7 +101,6 @@ def admin_edit_save():
     save_data(streets_data)
     return redirect(url_for('admin_edit_form', street_id=street_id))  # Редирект на GET-запрос
 
-
 @app.route('/admin/add_page', methods=['POST'])
 def admin_add_page():
     streets_data = load_data()
@@ -132,11 +125,9 @@ def admin_add_page():
     # Перенаправляем пользователя обратно на страницу редактирования
     return redirect(url_for('admin_edit_form', street_id=street_id))
 
-
 @app.route('/uploads/<filename>')
 def serve_portrets(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-
 
 @app.route('/adm')
 def admin():

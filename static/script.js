@@ -159,7 +159,7 @@ function displayStreets(streetsData) {
             }
 
             if (street.class === "Прочее") {
-                imageHTML = `<img src="/static/img/.png" alt="Прочее" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;">`;
+                imageHTML = `<img src="/static/img/proc.jpeg" alt="Прочее" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;">`;
             }
 
             if (street.type === "Улица") {

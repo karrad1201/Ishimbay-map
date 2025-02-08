@@ -3,44 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_adm.css') }}?v=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="{{ url_for('static', filename='script_admin.js') }}"></script>
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-          integrity="sha512-xodZBNTC5n17Xt2atTPvknpzUlcTS4vGH6dxqPf64EQWJ6xvogP9GsXjddQt6LWwnZduyKkWxX6bUhkNjuwdjg=="
-          crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-            crossorigin=""></script>
 </head>
 <body>
-    <header>
-        <h1>{% block header %}{% endblock %}</h1>
-        <nav>
-            <ul>
-                <li><a href="/">Карта</a></li>
-                <li><a href="/adm">Панель управления</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        {% if admin_page %}
+    <div class="polygon-container">
+
+        <header>
+            <h1>{% block header %}{% endblock %}</h1>
+        </header>
+
+        <main>
             <aside class="object-list">
                 <h2>Объекты</h2>
                 <ul id="object-list">
                     {% for street in streets_data %}
-                        <li><a href="{{ url_for('admin_edit_form', street_id=street.id) }}">{{ street.name }}</a></li>
+                        <li><a href="{{ url_for('admin_edit', street_id=street.id) }}">{{ street.name }}</a></li>
                     {% endfor %}
                 </ul>
                 <form method="post" action="/admin/add">
                     <button type="submit" id="add-object-button">Добавить объект</button>
                 </form>
             </aside>
-        {% endif %}
 
-        <section class="object-editor">
-          {% block content %}{% endblock %}
-        </section>
-    </main>
+            <section class="object-editor">
+              {% block content %}{% endblock %}
+            </section>
+        </main>
+
+    </div>
+
 </body>
 </html>

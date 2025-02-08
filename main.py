@@ -132,7 +132,7 @@ def serve_portrets(filename):
 @app.route('/adm')
 def admin():
     streets_data = load_data()
-    return render_template('adm.html', streets_data=streets_data)
+    return render_template('base.html', streets_data=streets_data, admin_page=True)
 
 if __name__ == '__main__':
     app.run(debug=True)

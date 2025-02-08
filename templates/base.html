@@ -24,7 +24,23 @@
     </header>
 
     <main>
-        {% block content %}{% endblock %}
+        {% if admin_page %}
+            <aside class="object-list">
+                <h2>Объекты</h2>
+                <ul id="object-list">
+                    {% for street in streets_data %}
+                        <li><a href="{{ url_for('admin_edit_form', street_id=street.id) }}">{{ street.name }}</a></li>
+                    {% endfor %}
+                </ul>
+                <form method="post" action="/admin/add">
+                    <button type="submit" id="add-object-button">Добавить объект</button>
+                </form>
+            </aside>
+        {% endif %}
+
+        <section class="object-editor">
+          {% block content %}{% endblock %}
+        </section>
     </main>
 </body>
 </html>

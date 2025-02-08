@@ -78,7 +78,7 @@
 
         </div>
     </div>
-        <form method="post" action="{{ url_for('admin_add_page') }}" {% if street.pages|length == 1 %} style="display: none;" {% endif %}>
+        <form method="post" action="{{ url_for('admin_add_page') }}">
             <input type="hidden" name="street_id" value="{{ street.id }}">
             <button id="add-page-button" class="add-page-button" type="submit">
                 <i class="fas fa-plus"></i>

@@ -11,6 +11,10 @@ app = Flask(__name__, static_folder=static_folder)
 # Теперь используем static_folder для определения DATA_FILE
 DATA_FILE = os.path.join(static_folder, 'streets_data.json')
 
+# Папка для хранения загруженных изображений (убедитесь, что она существует!)
+UPLOAD_FOLDER = os.path.join(static_folder, 'img')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 def load_data():
     with open(DATA_FILE, 'r', encoding='utf-8') as f:
         return json.load(f)
@@ -78,7 +82,25 @@ def admin_edit():
         for i, page in enumerate(street['pages']):
             page['title'] = request.form.get(f'page-{i+1}-title', '')
             page['content'] = request.form.get(f'page-{i+1}-content', '')
-            page['photo'] = request.form.get(f'page-{i+1}-photo', '')
+
+            # Обработка загрузки фото
+            photo = request.files.get(f'page-{i+1}-photo') # Изменено: используем .get()
+            if photo and photo.filename != '': # Проверяем, что файл был выбран
+                filename = secure_filename(photo.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename) # Полный путь к файлу
+                photo.save(filepath)
+                page['photo'] = f'/static/img/{filename}' # Сохраняем URL
+
+            # Обработка удаления фото
+            if 'delete_photo' in request.form and request.form['delete_photo'] == str(i+1):
+                if page['photo']:
+                    filepath = os.path.join(app.static_folder, page['photo'][1:])  # Исправлено: используем app.static_folder
+                    try:
+                        os.remove(filepath)
+                        print(f"Файл удален: {filepath}")
+                    except FileNotFoundError:
+                        print(f"Файл не найден: {filepath}")
+                    page['photo'] = '' # Убираем ссылку на фото
 
         save_data(streets_data)
         return redirect(url_for('admin'))
@@ -143,5 +165,22 @@ def admin_delete_street():
 
     return redirect(url_for('admin'))
 
+@app.route('/admin_add_page', methods=['POST'])
+def admin_add_page():
+    street_id = request.form['street_id']
+    streets_data = load_data()
+    street = next((s for s in streets_data if s['id'] == street_id), None)
+
+    if street is None:
+        return "Street not found", 404
+    
+    street['pages'].append({"title": "", "content": "", "photo": ""})
+    save_data(streets_data)
+    
+    return redirect(url_for('admin_edit', street_id=street_id))
+
 if __name__ == '__main__':
+    # Создаем папку для загрузок, если она не существует
+    if not os.path.exists(app.config['UPLOAD_FOLDER']):
+        os.makedirs(app.config['UPLOAD_FOLDER'])
     app.run(debug=True)

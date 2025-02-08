@@ -132,7 +132,7 @@ function displayPage(streetData, pageIndex) {
 function displayStreets(streetsData) {
     const streetList = document.getElementById('streetList');
     streetList.innerHTML = '';
-
+    
     if (streetsData) {
         // Разделяем улицы на важные и остальные
         const importantStreets = streetsData.filter(street => street.class === "Важное");
@@ -150,16 +150,16 @@ function displayStreets(streetsData) {
             let displayName = "";
             let imageHTML = "";
 
-            if (street.class === "Важное") {
+            if (street.class === "Важное" && street.photo) {
                 imageHTML = `<img src="/static/img/vasno.png" alt="Важное" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;">`;
             }
 
-            if (street.class === "Школа") {
+            if (street.class === "Школа" && street.photo) {
                 imageHTML = `<img src="/static/img/school.png" alt="Школа" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;">`;
             }
 
-            if (street.class === "Прочее") {
-                imageHTML = `<img src="/static/img/proc.jpeg" alt="Прочее" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;">`;
+            if (street.class === "Прочее" && street.photo) {
+                imageHTML = `<img src="/static/img/.png" alt="Прочее" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;">`;
             }
 
             if (street.type === "Улица") {

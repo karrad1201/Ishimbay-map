@@ -4,6 +4,7 @@
 {% block header %}Редактирование улицы {{ street.name }}{% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_adm.css') }}">
     <h2>Редактирование улицы</h2>
 
     <div class="pages-container">
@@ -12,8 +13,9 @@
         <div class="page" id="page-{{ loop.index }}" {% if loop.index > 1 %}style="display: none;"{% endif %}>
             <div class="object-editor-content">
                 <div class="scrollable-content">
-                    <form method="post" action="/admin/edit" id="object-form-{{ loop.index }}">
+                    <form method="post" action="/admin/edit" id="object-form-{{ loop.index }}" enctype="multipart/form-data">
                         <input type="hidden" name="street_id" value="{{ street.id }}">
+                        <input type="hidden" name="page_index" value="{{ loop.index }}">
 
                         <label for="page-{{ loop.index }}-title">Заголовок:</label>
                         <input type="text" id="page-{{ loop.index }}-title" name="page-{{ loop.index }}-title" value="{{ page.title }}"><br><br>
@@ -22,7 +24,11 @@
                         <textarea id="page-{{ loop.index }}-content" name="page-{{ loop.index }}-content" class="description-textarea">{{ page.content }}</textarea><br><br>
 
                         <label for="page-{{ loop.index }}-photo">Фото:</label>
-                        <input type="text" id="page-{{ loop.index }}-photo" name="page-{{ loop.index }}-photo" value="{{ page.photo }}"><br><br>
+                        <input type="file" id="page-{{ loop.index }}-photo" name="page-{{ loop.index }}-photo" accept="image/*"><br><br>
+                        {% if page.photo %}
+                            <img src="" alt="Фото" style="max-width: 200px;"><br><br>
+                            <button type="submit" name="delete_photo" value="{{ loop.index }}">Удалить фото</button>
+                        {% endif %}
 
                         {% if loop.index == 1 %}
                             <label for="name">Название:</label>
@@ -49,6 +55,9 @@
                             <label for="type">Тип:</label>
                             <input type="text" id="type" name="type" value="{{ street.type }}"><br><br>
                         {% endif %}
+                         <button type="submit" class="save-button">
+                            <i class="fas fa-save"></i> Сохранить страницу
+                        </button>
                     </form>
                 </div>
             </div>
@@ -60,36 +69,26 @@
         <div class="pagination">
             <div class="page-numbers">
                 {% for page in street.pages %}
-                <span class="page-number {% if loop.index == 1 %}active{% endif %}" data-page="{{ loop.index }}" href="#" role="button">{{ loop.index }}</span>
+                    <span class="page-number {% if loop.index == 1 %}active{% endif %}" data-page="{{ loop.index }}">
+                        {{ loop.index }}
+                    </span>
                 {% endfor %}
             </div>
-            <button id="add-page-button" class="add-page-button">
-                <i class="fas fa-plus"></i>
-            </button>
+            <!-- Оборачиваем кнопку в форму -->
+
         </div>
     </div>
-
-    <div class="button-container">
-        <button type="submit" class="save-button" form="object-form-1">
-            <i class="fas fa-save"></i> Сохранить
-        </button>
-
-        <form method="post" action="/admin/delete_street" onsubmit="return confirm('Вы уверены, что хотите удалить эту улицу?');">
+        <form method="post" action="{{ url_for('admin_add_page') }}" {% if street.pages|length == 1 %} style="display: none;" {% endif %}>
             <input type="hidden" name="street_id" value="{{ street.id }}">
-            <button id="delete-object-button" class="delete-button" type="submit">
-                <i class="fas fa-trash-alt"></i>
-                <span>Удалить улицу</span>
+            <button id="add-page-button" class="add-page-button" type="submit">
+                <i class="fas fa-plus"></i>
             </button>
         </form>
-        
-        {% for page in street.pages %}
-            {% if loop.index > 1 %}
-                <form method="post" action="/admin/delete_page" onsubmit="return confirm('Вы уверены, что хотите удалить эту страницу?');">
-                    <input type="hidden" name="street_id" value="{{ street.id }}">
-                    <input type="hidden" name="page_index" value="{{ loop.index }}">
-                    <button class="delete-button" type="submit">Удалить страницу</button>
-                </form>
-            {% endif %}
-        {% endfor %}
+
+    <div class="button-container">
+        <form method="post" action="/admin/delete_street" onsubmit="return confirm('Вы уверены, что хотите удалить эту улицу?');">
+            <input type="hidden" name="street_id" value="{{ street.id }}">
+            <button type="submit" class="delete-button">Удалить улицу</button>
+        </form>
     </div>
 {% endblock %}

@@ -1,22 +1,42 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Карта Ишимбая</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        #map { height: 500px; }
+    </style>
+</head>
+<body>
+    <div id="content-wrapper">
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
+        <div id="menu-container">
+            <div id="search-container">
+                <input type="text" id="searchInput" placeholder="Поиск улицы...">
+            </div>
+            <ul id="streetList"></ul>
+        </div>
+    </div>
 
-{% block title %}Карта Ишимбая{% endblock %}
+    <!-- Модальное окно для информации об улице -->
+    <div id="streetInfoContainer" class="modal">
+        <div class="modal-content">
+            <div id="modalHeader" style="cursor: grab; padding: 10px; background-color: #eee;">
+                <span class="close-button" onclick="document.getElementById('streetInfoContainer').style.display='none'">&times;</span>
+            </div>
+            <div id="streetInfoContent"></div>
+        </div>
+    </div>
 
-{% block header %}Карта города Ишимбай{% endblock %}
-
-{% block content %}
-  <!-- Здесь будет контент карты -->
-  <div id="map" style="height: 500px;"></div>
-  <script>
-    var map = L.map('map').setView([53.45, 56.05], 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    // Пример добавления маркера
-    L.marker([53.45, 56.05]).addTo(map)
-      .bindPopup('Ишимбай')
-      .openPopup();
-  </script>
-{% endblock %}
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        let streetsData = {{ streets_data|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

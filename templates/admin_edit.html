@@ -26,7 +26,7 @@
                         <label for="page-{{ loop.index }}-photo">Фото:</label>
                         <input type="file" id="page-{{ loop.index }}-photo" name="page-{{ loop.index }}-photo" accept="image/*"><br><br>
                         {% if page.photo %}
-                            <img src="" alt="Фото" style="max-width: 200px;"><br><br>
+                            <img src="{{ page.photo }}" alt="Фото" style="max-width: 200px;"><br><br>
                             <button type="submit" name="delete_photo" value="{{ loop.index }}">Удалить фото</button>
                         {% endif %}
 
